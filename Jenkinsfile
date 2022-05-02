@@ -1,21 +1,24 @@
 pipeline {
 	agent any
 	stages {
-		stage("Parallel Execution") {
+		stage("Cleaning stage") {
 			steps {
-				parallel(
-				      a: {
-					bat "mvn clean"
-				      },
-				      b: {
-					bat "mvn test"
-				      },
-				      c: {
-					bat "mvn package"
-				      }
-				)
+				
+			     bat "mvn clean"
 			}
+
 		}
+		stage("Testing stage") {
+			steps {		
+			     bat "mvn test"
+		        }
+		}
+		stage("Packaging stage"){
+		       steps {
+			     bat "mvn package"
+		       }
+				
+			}
 		stage("Consolidate Results") {
 			steps {
 				input ("Do you want to capture results?")
@@ -25,7 +28,7 @@ pipeline {
 		}
 		stage("Email Build Status"){
 			steps {
-				mail body: "${env.JOB_NAME}  - Build # ${env.BUILD_NUMBER}  - ${currentBuild.currentResult} \n\nCheck console output at ${env.BUILD_URL} to view the results.", subject: "${env.JOB_NAME}  - Build # ${env.BUILD_NUMBER}  - ${currentBuild.currentResult}!!", to: 'renju.jenkins.training@gmail.com'
+				mail body: "${env.JOB_NAME}  - Build # ${env.BUILD_NUMBER}  - ${currentBuild.currentResult} \n\nCheck console output at ${env.BUILD_URL} to view the results.", subject: "${env.JOB_NAME}  - Build # ${env.BUILD_NUMBER}  - ${currentBuild.currentResult}!!", to: 'gnanadurga@gmail.com'
 			}
 		}
 	}
